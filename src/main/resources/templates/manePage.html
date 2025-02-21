@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Личный кабинет</title>
+    <meta charset="UTF-8">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* From Uiverse.io by adamgiebl */
+        button {
+            position: relative;
+            display: inline-block;
+            margin: 15px;
+            padding: 15px 30px;
+            text-align: center;
+            font-size: 18px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            color: #725AC1;
+            background: transparent;
+            cursor: pointer;
+            transition: ease-out 0.5s;
+            border: 2px solid #725AC1;
+            border-radius: 10px;
+            box-shadow: inset 0 0 0 0 #725AC1;
+        }
+
+        button:hover {
+            color: white;
+            box-shadow: inset 0 -100px 0 0 #725AC1;
+        }
+
+        button:active {
+            transform: scale(0.9);
+        }
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+        }
+
+        .pagination a.active {
+            background-color: dodgerblue;
+            color: white;
+        }
+
+        .pagination a:hover:not(.active) {background-color: #ddd;}
+        .form-signup {
+            max-width: 600px;
+            padding: 15px 35px 45px;
+            margin: 0 auto;
+            background-color: #fff;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+
+        .form-control {
+            position: relative;
+            font-size: 16px;
+            height: auto;
+            padding: 10px;
+            margin-bottom: 20px;
+
+            &:focus {
+                z-index: 2;
+            }
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        .modal-content {
+
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+<main>
+    <div class="container">
+        <table class="table table-bordered mt-4">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>name</th>
+                <th>surname</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="student : ${students}">
+                <td th:text="${student.id}">1</td>
+                <td th:text="${student.name}">name</td>
+                <td th:text="${student.surname}">surname</td>
+                <td>
+                    <form th:action="@{/crud/delete}" method="post" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${student.id}" />
+                        <input type="hidden" name="_method" value="DELETE" />
+                        <button class="btn btn-danger" type="submit" onclick="return confirm('Вы уверены, что хотите удалить этого пользователя?');">
+                            Удалить
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <form class="form-signup" action="/crud/create" method="post" enctype="multipart/form-data"    >
+            <input type="text" class="form-control" name="name" placeholder="name" required>
+            <input type="text" class="form-control" name="surname" placeholder="surname" required>
+            <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+        </form>
+        <form class="form-signup" th:action="@{/crud/update}" method="post" style="margin-top: 20px">
+            <input type="text" id="updateId" name="id" style="margin-bottom:10px" placeholder="ID">
+
+                <input type="text" class="form-control" id="updateName" name="name" placeholder="name" required>
+
+                <input type="text" class="form-control" id="updateSurname" name="surname" placeholder="surname" required>
+
+            <button type="submit" class="btn btn-success">Сохранить</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>
